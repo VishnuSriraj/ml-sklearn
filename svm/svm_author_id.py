@@ -12,19 +12,37 @@ import sys
 from time import time
 sys.path.append("../tools/")
 from email_preprocess import preprocess
-
+from math import floor
 
 ### features_train and features_test are the features for the training
 ### and testing datasets, respectively
 ### labels_train and labels_test are the corresponding item labels
 features_train, features_test, labels_train, labels_test = preprocess()
 
+# features_train = features_train[:floor(len(features_train)/100)] 
+# labels_train = labels_train[:floor(len(labels_train)/100)] 
 
+###SVM
+from sklearn.svm import SVC 
+from sklearn.metrics import accuracy_score
+clf = SVC(kernel="rbf", C=10000.0, gamma='auto')
 
+t0 = time()
+clf.fit(features_train, labels_train)
+print("Training time is ",round(time()-t0,3)," secs")
 
-#########################################################
-### your code goes here ###
+t0 = time()
+pred = clf.predict(features_test)
+print("Testing time is ",round(time()-t0,3)," secs")
 
+accuracy = accuracy_score(pred, labels_test)
+print("Accuracy is ", accuracy)
+count = 0
+for x in pred:
+    if x == 1:
+        count = count+1
+# answer=[pred[10],pred[26],pred[50]]
+print(count)
 #########################################################
 
 
